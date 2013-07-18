@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Properties;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -121,20 +124,7 @@ class FactoryFinder {
         } catch (SecurityException se) {
         }
 
-        ClassLoader moduleClassLoader = null;
-        try {
-           Class<?> moduleClass = Class.forName("org.jboss.modules.Module");
-           Class<?> moduleIdentifierClass = Class.forName("org.jboss.modules.ModuleIdentifier");
-           Class<?> moduleLoaderClass = Class.forName("org.jboss.modules.ModuleLoader");
-           Object moduleLoader = moduleClass.getMethod("getBootModuleLoader").invoke(null);
-           Object moduleIdentifier = moduleIdentifierClass.getMethod("create", String.class).invoke(null, JBOSS_JAXWS_CLIENT_MODULE);
-           Object module = moduleLoaderClass.getMethod("loadModule", moduleIdentifierClass).invoke(moduleLoader, moduleIdentifier);
-           moduleClassLoader = (ClassLoader)moduleClass.getMethod("getClassLoader").invoke(module);
-        } catch (ClassNotFoundException e) {
-           //ignore, JBoss Modules might not be available at all
-        } catch (Exception e) {
-           throw new WebServiceException(e);
-        }
+        ClassLoader moduleClassLoader = getModuleClassLoader();
         if (moduleClassLoader != null) {
            try {
               InputStream is = moduleClassLoader.getResourceAsStream(serviceId);
@@ -163,6 +153,36 @@ class FactoryFinder {
         return newInstance(fallbackClassName, classLoader);
     }
 
+    private static ClassLoader getModuleClassLoader() throws WebServiceException {
+        try {
+            final Class<?> moduleClass = Class.forName("org.jboss.modules.Module");
+            final Class<?> moduleIdentifierClass = Class.forName("org.jboss.modules.ModuleIdentifier");
+            final Class<?> moduleLoaderClass = Class.forName("org.jboss.modules.ModuleLoader");
+            final Object moduleLoader;
+            final SecurityManager sm = System.getSecurityManager();
+            if (sm == null) {
+                moduleLoader = moduleClass.getMethod("getBootModuleLoader").invoke(null);
+            } else {
+                try {
+                    moduleLoader = AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+                        public Object run() throws Exception {
+                            return moduleClass.getMethod("getBootModuleLoader").invoke(null);
+                        }
+                    });
+                } catch (PrivilegedActionException pae) {
+                    throw (WebServiceException) pae.getException();
+                }
+            }
+            Object moduleIdentifier = moduleIdentifierClass.getMethod("create", String.class).invoke(null, JBOSS_JAXWS_CLIENT_MODULE);
+            Object module = moduleLoaderClass.getMethod("loadModule", moduleIdentifierClass).invoke(moduleLoader, moduleIdentifier);
+            return (ClassLoader)moduleClass.getMethod("getClassLoader").invoke(module);
+         } catch (ClassNotFoundException e) {
+            //ignore, JBoss Modules might not be available at all
+             return null;
+         } catch (Exception e) {
+            throw new WebServiceException(e);
+         }
+    }
 
     /**
      * Loads the class, provided that the calling thread has an access to the class being loaded.
