@@ -7,6 +7,8 @@
 package javax.xml.ws.spi;
 
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
@@ -137,13 +139,22 @@ public abstract class Provider {
                 throw new WebServiceException("Cannot invoke java.util.ServiceLoader#load()", e);
             }
 
-            Iterator<Provider> it;
+            final Iterator<Provider> it;
             try {
                 it = (Iterator<Provider>)iteratorMethod.invoke(loader);
             } catch(Exception e) {
                 throw new WebServiceException("Cannot invoke java.util.ServiceLoader#iterator()", e);
             }
-            return it.hasNext() ? it.next() : null;
+            final SecurityManager sm = System.getSecurityManager();
+            if (sm == null) {
+                return it.hasNext() ? it.next() : null;
+            } else {
+                return AccessController.doPrivileged(new PrivilegedAction<Provider>() {
+                    public Provider run() {
+                        return it.hasNext() ? it.next() : null;
+                    }
+                });
+            }
         }
         return null;
     }
