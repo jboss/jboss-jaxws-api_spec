@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.jboss</groupId>
     <artifactId>jboss-parent</artifactId>
-    <version>9</version>
+    <version>19</version>
   </parent>
 
   <groupId>org.jboss.spec.javax.xml.ws</groupId>
@@ -16,6 +16,11 @@
 
   <name>Java(TM) API for XML-Based Web Services 2.2</name>
   <description>JSR-000224: Java(TM) API for XML-Based Web Services 2.2</description>
+
+  <properties>
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.6</maven.compiler.source>
+  </properties>
 
   <licenses>
     <license>
