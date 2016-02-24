@@ -6,9 +6,12 @@
 
 package javax.xml.ws.spi;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
@@ -132,9 +135,23 @@ public abstract class Provider {
 
     private static Provider getProviderUsingServiceLoader() {
         if (loadMethod != null) {
+            final SecurityManager sm = System.getSecurityManager();
             Object loader;
             try {
-                loader = loadMethod.invoke(null, Provider.class);
+                if (sm == null) {
+                    loader = loadMethod.invoke(null, Provider.class);
+                } else {
+                    try {
+                        loader = AccessController.doPrivileged(new PrivilegedExceptionAction<Object>() {
+                            @Override
+                            public Object run() throws InvocationTargetException, IllegalAccessException {
+                                return loadMethod.invoke(null, Provider.class);
+                            }
+                        });
+                    } catch (PrivilegedActionException pae) {
+                        throw pae.getException();
+                    }
+                }
             } catch (Exception e) {
                 throw new WebServiceException("Cannot invoke java.util.ServiceLoader#load()", e);
             }
@@ -145,7 +162,6 @@ public abstract class Provider {
             } catch(Exception e) {
                 throw new WebServiceException("Cannot invoke java.util.ServiceLoader#iterator()", e);
             }
-            final SecurityManager sm = System.getSecurityManager();
             if (sm == null) {
                 return it.hasNext() ? it.next() : null;
             } else {
