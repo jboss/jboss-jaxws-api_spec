@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.Properties;
@@ -67,7 +68,7 @@ class FactoryFinder {
     {
         ClassLoader classLoader;
         try {
-            classLoader = Thread.currentThread().getContextClassLoader();
+            classLoader = getContextClassLoader();
         } catch (Exception x) {
             throw new WebServiceException(x.toString(), x);
         }
@@ -153,6 +154,20 @@ class FactoryFinder {
         return newInstance(fallbackClassName, classLoader);
     }
 
+    private static ClassLoader getContextClassLoader() {
+        final SecurityManager sm = System.getSecurityManager();
+        if (sm == null) {
+            return Thread.currentThread().getContextClassLoader();
+        }
+
+        return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            @Override
+            public ClassLoader run() {
+                return Thread.currentThread().getContextClassLoader();
+            }
+        });
+    }
+
     private static ClassLoader getModuleClassLoader() throws WebServiceException {
         try {
             final Class<?> moduleClass = Class.forName("org.jboss.modules.Module");
@@ -173,9 +188,21 @@ class FactoryFinder {
                     throw (WebServiceException) pae.getException();
                 }
             }
-            Object moduleIdentifier = moduleIdentifierClass.getMethod("create", String.class).invoke(null, JBOSS_JAXWS_CLIENT_MODULE);
-            Object module = moduleLoaderClass.getMethod("loadModule", moduleIdentifierClass).invoke(moduleLoader, moduleIdentifier);
-            return (ClassLoader)moduleClass.getMethod("getClassLoader").invoke(module);
+            final Object moduleIdentifier = moduleIdentifierClass.getMethod("create", String.class).invoke(null, JBOSS_JAXWS_CLIENT_MODULE);
+            final Object module = moduleLoaderClass.getMethod("loadModule", moduleIdentifierClass).invoke(moduleLoader, moduleIdentifier);
+            if (sm == null) {
+                return (ClassLoader)moduleClass.getMethod("getClassLoader").invoke(module);
+            }
+            try {
+                return AccessController.doPrivileged(new PrivilegedExceptionAction<ClassLoader>() {
+                    @Override
+                    public ClassLoader run() throws Exception {
+                        return (ClassLoader) moduleClass.getMethod("getClassLoader").invoke(module);
+                    }
+                });
+            } catch (PrivilegedActionException pae) {
+                throw pae.getException();
+            }
          } catch (ClassNotFoundException e) {
             //ignore, JBoss Modules might not be available at all
              return null;
