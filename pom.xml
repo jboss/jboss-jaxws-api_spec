@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.jboss</groupId>
     <artifactId>jboss-parent</artifactId>
-    <version>23</version>
+    <version>25</version>
   </parent>
 
   <groupId>org.jboss.spec.javax.xml.ws</groupId>
@@ -62,6 +62,9 @@
             <manifest>
               <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
             </manifest>
+            <manifestEntries>
+              <Automatic-Module-Name>beta.jboss.jaxws.api_2_2</Automatic-Module-Name>
+            </manifestEntries>
           </archive>
           <instructions>
             <Specification-Title>JSR-000224: Java(TM) API for XML-Based Web Services</Specification-Title>
