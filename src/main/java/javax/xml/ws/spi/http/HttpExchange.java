@@ -1,6 +1,41 @@
 /*
- * Copyright 2007 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2005-2017 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://oss.oracle.com/licenses/CDDL+GPL-1.1
+ * or LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
  */
 
 package javax.xml.ws.spi.http;
@@ -21,12 +56,12 @@ import java.security.Principal;
  * for examining the request from the client, and for building and
  * sending the response.
  * <p>
- * A <code>HttpExchange</code> must be closed to free or reuse
+ * A {@code HttpExchange} must be closed to free or reuse
  * underlying resources. The effect of failing to close an exchange
  * is undefined.
  *
  * @author Jitendra Kotamraju
- * @since JAX-WS 2.2
+ * @since 1.7, JAX-WS 2.2
  */
 public abstract class HttpExchange {
 
@@ -103,7 +138,7 @@ public abstract class HttpExchange {
      * Adds a response header with the given name and value. This method
      * allows a response header to have multiple values. This is a
      * convenience method to add a response header(instead of using the
-     * {link #getResponseHeaders()}).
+     * {@link #getResponseHeaders()}).
      * 
      * @param name the name of the header
      * @param value the additional header value. If it contains octet string,
@@ -239,7 +274,7 @@ public abstract class HttpExchange {
      *         It is the path that comes
      *         after the web service path but before the query string in the
      *         request URI
-     *         <tt>null</tt> if there is no extra path in the request URI
+     *         {@code null} if there is no extra path in the request URI
      */
     public abstract String getPathInfo();
 
@@ -251,13 +286,13 @@ public abstract class HttpExchange {
      * This can be used for {@link MessageContext#QUERY_STRING}
      *
      * @return undecoded query string of request URI, or
-     *         <tt>null</tt> if the request URI doesn't have one
+     *         {@code null} if the request URI doesn't have one
      */
     public abstract String getQueryString();
 
     /**
      * Returns an attribute that is associated with this
-     * <code>HttpExchange</code>. JAX-WS handlers and endpoints may then
+     * {@code HttpExchange}. JAX-WS handlers and endpoints may then
      * access the attribute via {@link MessageContext}.
      * <p>
      * Servlet containers must expose {@link MessageContext#SERVLET_CONTEXT},
@@ -272,14 +307,14 @@ public abstract class HttpExchange {
      * be exposed using {@link #REQUEST_X509CERTIFICATE}
      *
      * @param name attribute name
-     * @return the attribute value, or <tt>null</tt> if the attribute doesn't
+     * @return the attribute value, or {@code null} if the attribute doesn't
      *         exist
      */
     public abstract Object getAttribute(String name);
 
     /**
      * Gives all the attribute names that are associated with
-     * this <code>HttpExchange</code>.
+     * this {@code HttpExchange}.
      *
      * @return set of all attribute names
      * @see #getAttribute(String)
@@ -288,10 +323,10 @@ public abstract class HttpExchange {
     
     /**
      * Returns the {@link Principal} that represents the authenticated
-     * user for this <code>HttpExchange</code>.
+     * user for this {@code HttpExchange}.
      *
      * @return Principal for an authenticated user, or
-     *         <tt>null</tt> if not authenticated
+     *         {@code null} if not authenticated
      */
     public abstract Principal getUserPrincipal();
 
@@ -300,7 +335,7 @@ public abstract class HttpExchange {
      * logical "role".
      *
      * @param role specifies the name of the role
-     * @return <tt>true</tt> if the user making this request belongs to a
+     * @return {@code true} if the user making this request belongs to a
      *         given role
      */
     public abstract boolean isUserInRole(String role);

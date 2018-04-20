@@ -1,6 +1,41 @@
 /*
- * Copyright 2007 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2005-2017 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://oss.oracle.com/licenses/CDDL+GPL-1.1
+ * or LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
  */
 
 package javax.xml.ws.handler.soap;
@@ -10,33 +45,33 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.namespace.QName;
 import java.util.Set;
 
-/** The interface <code>SOAPMessageContext</code> 
+/** The interface {@code SOAPMessageContext}
  *  provides access to the SOAP message for either RPC request or 
- *  response. The <code>javax.xml.soap.SOAPMessage</code> specifies
+ *  response. The {@code javax.xml.soap.SOAPMessage} specifies
  *  the standard Java API for the representation of a SOAP 1.1 message
  *  with attachments.
  *
  *  @see javax.xml.soap.SOAPMessage
  * 
- *  @since JAX-WS 2.0
+ *  @since 1.6, JAX-WS 2.0
 **/
 public interface SOAPMessageContext 
                     extends javax.xml.ws.handler.MessageContext {
 
-  /** Gets the <code>SOAPMessage<code> from this message context. Modifications
-   *  to the returned <code>SOAPMessage</code> change the message in-place, there
-   *  is no need to susequently call <code>setMessage</code>.
+  /** Gets the {@code SOAPMessage} from this message context. Modifications
+   *  to the returned {@code SOAPMessage} change the message in-place, there
+   *  is no need to subsequently call {@code setMessage}.
    *
-   *  @return Returns the <code>SOAPMessage</code>; returns <code>null</code> if no 
-   *          <code>SOAPMessage</code> is present in this message context
+   *  @return Returns the {@code SOAPMessage}; returns {@code null} if no
+   *          {@code SOAPMessage} is present in this message context
   **/
   public SOAPMessage getMessage();
 
   /** Sets the SOAPMessage in this message context
    *
    *  @param  message SOAP message
-   *  @throws WebServiceException If any error during the setting
-   *          of the <code>SOAPMessage</code> in this message context
+   *  @throws javax.xml.ws.WebServiceException If any error during the setting
+   *          of the {@code SOAPMessage} in this message context
    *  @throws java.lang.UnsupportedOperationException If this
    *          operation is not supported
   **/
@@ -49,16 +84,16 @@ public interface SOAPMessageContext
    *  @param  header The XML qualified name of the SOAP header(s).
    *  @param  context The JAXBContext that should be used to unmarshall the 
    *          header
-   *  @param  allRoles If <code>true</code> then returns headers for all SOAP
-   *          roles, if <code>false</code> then only returns headers targetted
+   *  @param  allRoles If {@code true} then returns headers for all SOAP
+   *          roles, if {@code false} then only returns headers targetted
    *          at the roles currently being played by this SOAP node, see
-   *          <code>getRoles</code>.
+   *          {@code getRoles}.
    *  @return An array of unmarshalled headers; returns an empty array if no 
    *          message is present in this message context or no headers match
    *          the supplied qualified name.
-   *  @throws WebServiceException If an error occurs when using the supplied
-   *     <code>JAXBContext</code> to unmarshall. The cause of
-   *     the <code>WebServiceException</code> is the original <code>JAXBException</code>.
+   *  @throws javax.xml.ws.WebServiceException If an error occurs when using the supplied
+   *     {@code JAXBContext} to unmarshall. The cause of
+   *     the {@code WebServiceException} is the original {@code JAXBException}.
   **/
   public Object[] getHeaders(QName header, JAXBContext context,
     boolean allRoles);
@@ -67,13 +102,13 @@ public interface SOAPMessageContext
    *  of the handler chain.
    *  Note that SOAP actor roles apply to the SOAP node and
    *  are managed using {@link javax.xml.ws.soap.SOAPBinding#setRoles} and
-   *  {@link javax.xml.ws.soap.SOAPBinding#getRoles}. <code>Handler</code> instances in
+   *  {@link javax.xml.ws.soap.SOAPBinding#getRoles}. {@code Handler} instances in
    *  the handler chain use this information about the SOAP actor
    *  roles to process the SOAP header blocks. Note that the
    *  SOAP actor roles are invariant during the processing of
    *  SOAP message through the handler chain.
    *
-   *  @return Array of <code>String</code> for SOAP actor roles
+   *  @return Array of {@code String} for SOAP actor roles
   **/
   public Set<String> getRoles();
 }

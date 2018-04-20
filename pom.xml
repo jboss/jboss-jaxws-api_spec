@@ -10,22 +10,22 @@
   </parent>
 
   <groupId>org.jboss.spec.javax.xml.ws</groupId>
-  <artifactId>jboss-jaxws-api_2.2_spec</artifactId>
-  <version>2.0.6.Final-SNAPSHOT</version>
+  <artifactId>jboss-jaxws-api_2.3_spec</artifactId>
+  <version>1.0.0.Final-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Java(TM) API for XML-Based Web Services 2.2</name>
-  <description>JSR-000224: Java(TM) API for XML-Based Web Services 2.2</description>
+  <name>Java(TM) API for XML-Based Web Services 2.3</name>
+  <description>JSR-000224: Java(TM) API for XML-Based Web Services 2.3</description>
 
   <properties>
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
   </properties>
 
   <licenses>
     <license>
       <name>Common Development and Distribution License</name>
-      <url>http://repository.jboss.org/licenses/cddl.txt</url>
+      <url>http://repository.jboss.org/licenses/cddl-v1.1.txt</url>
       <distribution>repo</distribution>
     </license>
     <license>
@@ -41,6 +41,14 @@
     <url>https://github.com/jboss/jboss-jaxws-api_spec</url>
     <tag>HEAD</tag>
   </scm>
+
+  <distributionManagement>
+        <repository>
+            <id>jboss-releases-repository</id>
+            <name>JBoss Releases Repository</name>
+            <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+        </repository>
+   </distributionManagement>
 
   <build>
     <plugins>
@@ -63,16 +71,16 @@
               <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
             </manifest>
             <manifestEntries>
-              <Automatic-Module-Name>beta.jboss.jaxws.api_2_2</Automatic-Module-Name>
+              <Automatic-Module-Name>beta.jboss.jaxws.api_2_3</Automatic-Module-Name>
             </manifestEntries>
           </archive>
           <instructions>
             <Specification-Title>JSR-000224: Java(TM) API for XML-Based Web Services</Specification-Title>
             <Specification-Vendor>Oracle</Specification-Vendor>
-            <Specification-Version>2.2</Specification-Version>
+            <Specification-Version>2.3</Specification-Version>
             <!-- Set the package version to match the spec version -->
             <Export-Package>
-              javax.xml.ws*;version=2.2
+              javax.xml.ws*;version=2.3
             </Export-Package>
           </instructions>
         </configuration>
@@ -96,7 +104,7 @@
             <manifestEntries>
               <Specification-Title>JSR-000224: Java(TM) API for XML-Based Web Services</Specification-Title>
               <Specification-Vendor>Oracle</Specification-Vendor>
-              <Specification-Version>2.2</Specification-Version>
+              <Specification-Version>2.3</Specification-Version>
             </manifestEntries>
           </archive>
         </configuration>

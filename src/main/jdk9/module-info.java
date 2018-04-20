@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2005-2017 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,34 +38,23 @@
  * holder.
  */
 
-package javax.xml.ws.http;
+module java.xml.ws {
+    requires java.xml.bind;
+    requires java.logging;
+    requires java.xml.soap;
+    requires java.xml.ws.annotation;
 
+    exports javax.xml.ws;
+    exports javax.xml.ws.handler;
+    exports javax.xml.ws.handler.soap;
+    exports javax.xml.ws.http;
+    exports javax.xml.ws.soap;
+    exports javax.xml.ws.spi;
+    exports javax.xml.ws.spi.http;
+    exports javax.xml.ws.wsaddressing;
 
-/** The {@code HTTPException} exception represents a
- *  XML/HTTP fault.
- *
- *  <p>Since there is no standard format for faults or exceptions
- *  in XML/HTTP messaging, only the HTTP status code is captured. 
- * 
- *  @since 1.6, JAX-WS 2.0
-**/
-public class HTTPException extends javax.xml.ws.ProtocolException  {
-  
-  private int statusCode;
-
-  /** Constructor for the HTTPException
-   *  @param statusCode   {@code int} for the HTTP status code
-  **/
-  public HTTPException(int statusCode) { 
-    super();
-    this.statusCode = statusCode;
-  }
-
-  /** Gets the HTTP status code.
-   *
-   *  @return HTTP status code
-  **/
-  public int getStatusCode() {
-    return statusCode;
-  }
+    uses javax.xml.ws.spi.Invoker;
+    uses javax.xml.ws.spi.Provider;
+    uses javax.xml.ws.spi.ServiceDelegate;
+    uses javax.xml.ws.spi.WebServiceFeatureAnnotation;
 }
