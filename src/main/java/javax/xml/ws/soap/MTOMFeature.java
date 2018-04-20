@@ -1,13 +1,47 @@
 /*
- * Copyright 2007 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2005-2017 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://oss.oracle.com/licenses/CDDL+GPL-1.1
+ * or LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
  */
 
 package javax.xml.ws.soap;
 
 import javax.xml.ws.WebServiceFeature;
 import javax.xml.ws.WebServiceException;
-import javax.xml.ws.Dispatch;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 
@@ -16,7 +50,7 @@ import javax.xml.ws.Service;
  * web service.
  *
  * This feature can be used during the creation of SEI proxy, and
- * {@link Dispatch} instances on the client side and {@link Endpoint}
+ * {@link javax.xml.ws.Dispatch} instances on the client side and {@link Endpoint}
  * instances on the server side. This feature cannot be used for {@link Service}
  * instance creation on the client side.
  *
@@ -35,7 +69,7 @@ import javax.xml.ws.Service;
  * The {@link #threshold} property can be used to set the threshold 
  * value used to determine when binary data should be XOP encoded.
  *
- * @since JAX-WS 2.1
+ * @since 1.6, JAX-WS 2.1
  */       
 public final class MTOMFeature extends WebServiceFeature {
     /** 
@@ -48,37 +82,40 @@ public final class MTOMFeature extends WebServiceFeature {
      * Property for MTOM threshold value. This property serves as a hint when 
      * MTOM is enabled, binary data above this size in bytes SHOULD be sent 
      * as attachment.
-     * The value of this property MUST always be >= 0. Default value is 0.      
+     * The value of this property MUST always be {@literal >=} 0. Default value is 0.
      */
-    protected int threshold = 0;
+    // should be changed to private final, keeping original modifier to keep backwards compatibility
+    protected int threshold;
     
 
     /**
-     * Create an <code>MTOMFeature</code>.
+     * Create an {@code MTOMFeature}.
      * The instance created will be enabled.
      */
     public MTOMFeature() {
         this.enabled = true;
-    }    
+        this.threshold = 0;
+    }
     
     /**
-     * Creates an <code>MTOMFeature</code>.
+     * Creates a {@code MTOMFeature}.
      * 
      * @param enabled specifies if this feature should be enabled or not
      */
     public MTOMFeature(boolean enabled) {
         this.enabled = enabled;
+        this.threshold = 0;
     }
 
 
     /**
-     * Creates an <code>MTOMFeature</code>.
+     * Creates a {@code MTOMFeature}.
      * The instance created will be enabled.
      *
      * @param threshold the size in bytes that binary data SHOULD be before
      * being sent as an attachment.
      *
-     * @throws WebServiceException if threshold is < 0
+     * @throws WebServiceException if threshold is {@literal <} 0
      */
     public MTOMFeature(int threshold) {
         if (threshold < 0)
@@ -88,13 +125,13 @@ public final class MTOMFeature extends WebServiceFeature {
     }    
     
     /**
-     * Creates an <code>MTOMFeature</code>.
+     * Creates a {@code MTOMFeature}.
      * 
      * @param enabled specifies if this feature should be enabled or not
      * @param threshold the size in bytes that binary data SHOULD be before
      * being sent as an attachment.
      *
-     * @throws WebServiceException if threshold is < 0
+     * @throws WebServiceException if threshold is {@literal <} 0
      */
     public MTOMFeature(boolean enabled, int threshold) {
         if (threshold < 0)
